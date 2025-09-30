@@ -2,10 +2,20 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 import crud, models, schemas
 from database import SessionLocal, engine
+from fastapi.middleware.cors import CORSMiddleware
+
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or ["http://localhost:3000"] if you want to lock it down
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/health")
 def health_check():
